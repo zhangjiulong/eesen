@@ -14,7 +14,7 @@ OBJFILES = cmvn.o feature-functions.o feature-mfcc.o feature-plp.o feature-fbank
 
 LIBNAME = kaldi-feat
 
-ADDLIBS = ../util/kaldi-util.a ../matrix/kaldi-matrix.a ../base/kaldi-base.a ../thread/kaldi-thread.a
+ADDLIBS = ../util/kaldi-util.a ../matrix/kaldi-matrix.a ../base/kaldi-base.a
 
 include ../makefiles/default_rules.mk
 

@@ -7,6 +7,8 @@ include ../kaldi.mk
 LDFLAGS += $(CUDA_LDFLAGS)
 LDLIBS += $(CUDA_LDLIBS)
 
+CXXFLAGS += -fpermissive
+
 TESTFILES = 
 
 OBJFILES = nnet-nnet.o nnet-component.o nnet-ctc-loss.o \
