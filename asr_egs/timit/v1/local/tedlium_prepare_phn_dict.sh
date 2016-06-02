@@ -7,7 +7,7 @@
 dir=data/local/dict_phn
 mkdir -p $dir
 
-srcdict=db/cantab-TEDLIUM/cantab-TEDLIUM.dct
+srcdict=/home/zhangjl/dataCenter/asr/tedlium/cantab-TEDLIUM/cantab-TEDLIUM.dct
 
 . parse_options.sh
 
