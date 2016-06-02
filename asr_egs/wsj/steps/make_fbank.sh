@@ -88,7 +88,7 @@ if [ -f $data/segments ]; then
     compute-fbank-feats $vtln_opts --verbose=2 --config=$fbank_config ark:- ark:- \| \
     copy-feats --compress=$compress ark:- \
      ark,scp:$fbankdir/raw_fbank_$name.JOB.ark,$fbankdir/raw_fbank_$name.JOB.scp \
-     || exit 1;
+     || exit 208;
 
 else
   echo "$0: [info]: no segments file exists: assuming wav.scp indexed by utterance."
@@ -103,7 +103,7 @@ else
     compute-fbank-feats $vtln_opts --verbose=2 --config=$fbank_config scp,p:$logdir/wav.JOB.scp ark:- \| \
     copy-feats --compress=$compress ark:- \
      ark,scp:$fbankdir/raw_fbank_$name.JOB.ark,$fbankdir/raw_fbank_$name.JOB.scp \
-     || exit 1;
+     || exit 209;
 
 fi
 

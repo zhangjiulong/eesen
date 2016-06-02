@@ -64,7 +64,7 @@ for set in test train; do
   
   # Prepare 'wav.scp', 'reco2file_and_channel' 
   # cat $dir/spk2utt | awk -v set=$set -v pwd=$PWD -v sph2pipe=$sph2pipe -v d=$data_dir '{ printf("%s %s -f wav -p %s/%s/%s/sph/%s.sph |\n", $1, sph2pipe, pwd, d, set, $1); }' > $dir/wav.scp
-  cat $dir/spk2utt | awk -v set=$set -v d=$data_dir '{ printf("%s %s/%s/wav/%s.wav |\n", $1, d, set, $1); }' > $dir/wav.scp
+  cat $dir/spk2utt | awk -v set=$set -v d=$data_dir '{ printf("%s %s/%s/wav/%s.wav\n", $1, d, set, $1); }' > $dir/wav.scp
   cat $dir/wav.scp | awk '{ print $1, $1, "A"; }' > $dir/reco2file_and_channel
   
   # Create empty 'glm' file

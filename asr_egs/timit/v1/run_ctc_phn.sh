@@ -12,7 +12,7 @@
          ## This relates to the queue.
 . path.sh
 
-stage=0
+stage=2
 
 . parse_options.sh
 
@@ -45,7 +45,7 @@ if [ $stage -le 2 ]; then
   fbankdir=fbank
 
   # Generate the fbank features; by default 40-dimensional fbanks on each frame
-  for set in train test dev; do
+  for set in train test; do
     steps/make_fbank.sh --cmd "$train_cmd" --nj 20 data/$set exp/make_fbank/$set $fbankdir || exit 21;
     utils/fix_data_dir.sh data/$set || exit 22;
     steps/compute_cmvn_stats.sh data/$set exp/make_fbank/$set $fbankdir || exit 23;
