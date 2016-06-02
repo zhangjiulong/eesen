@@ -27,3 +27,8 @@ project.xcworkspace
 
 # swp files
 *.swp
+
+
+*#
+#.pyc
+TAGS
