@@ -12,7 +12,7 @@
          ## This relates to the queue.
 . path.sh
 
-stage=2
+stage=1
 
 . parse_options.sh
 
@@ -88,8 +88,8 @@ if [ $stage -le 3 ]; then
   echo "                            Decoding                               "
   echo =====================================================================
   # decoding
-  steps/decode_ctc_lat.sh --cmd "$decode_cmd" --nj 8 --beam 17.0 --lattice_beam 8.0 --max-active 5000 --acwt 0.6 \
-    data/lang_phn_test data/dev $dir/decode_dev || exit 33;
+#  steps/decode_ctc_lat.sh --cmd "$decode_cmd" --nj 8 --beam 17.0 --lattice_beam 8.0 --max-active 5000 --acwt 0.6 \
+ #   data/lang_phn_test data/test $dir/decode_dev || exit 33;
   steps/decode_ctc_lat.sh --cmd "$decode_cmd" --nj 11 --beam 17.0 --lattice_beam 8.0 --max-active 5000 --acwt 0.6 \
     data/lang_phn_test data/test $dir/decode_test || exit 34;
 fi

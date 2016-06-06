@@ -19,6 +19,11 @@ sph2pipe=$EESEN_ROOT/tools/sph2pipe_v2.5/sph2pipe
 [ ! -x $sph2pipe ] \
   && echo "Could not execute the sph2pipe program at $sph2pipe" && exit 2;
 
+dicFile=/home/zhangjl/dataCenter/lm/engLMData/timit.4lm.dic
+[ ! -r $dicFile ] \
+  && echo "dic file $dicFile do not exists " && exit 2;
+
+
 # Prepare: test, train,
 for set in test train; do
   dir=data/$set
@@ -47,7 +52,7 @@ for set in test train; do
           -e 's:<sil>::g' \
           -e 's:([^ ]*)$::' | \
       awk '{ $2 = "A"; print $0; }'
-  } | local/join_suffix.py ${data_dir}/TEDLIUM.*.dic > data/$set/stm 
+  } | local/join_suffix.py $dicFile > data/$set/stm 
 
   # Prepare 'text' file
   # - {NOISE} -> [NOISE] : map the tags to match symbols in dictionary
