@@ -61,8 +61,10 @@ if [ $stage -le 3 ]; then
   echo =====================================================================
   # Specify network structure and generate the network topology
   input_feat_dim=120   # dimension of the input features; we will use 40-dimensional fbanks with deltas and double deltas
-  lstm_layer_num=5     # number of LSTM layers
-  lstm_cell_dim=320    # number of memory cells in every LSTM layer
+  #lstm_layer_num=5     # number of LSTM layers
+  lstm_layer_num=2     # number of LSTM layers
+  #lstm_cell_dim=320    # number of memory cells in every LSTM layer
+  lstm_cell_dim=120    # number of memory cells in every LSTM layer
 
   dir=exp/train_phn_l${lstm_layer_num}_c${lstm_cell_dim}
   mkdir -p $dir

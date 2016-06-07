@@ -9,8 +9,8 @@
 #/home/zhangjl/dataCenter/asr/tedlium/cantab-TEDLIUM
 #arpa_lm=/home/zhangjl/dataCenter/asr/tedlium/cantab-TEDLIUM/cantab-TEDLIUM-pruned.lm3.gz
 arpa_lm=/home/zhangjl/dataCenter/lm/engLMData/timit.4lm.lm3.gz
-#oov_list=/dev/null
-oov_list=/home/zhangjl/dataCenter/lm/engLMData/oov.txt
+oov_list=/dev/null
+#oov_list=/home/zhangjl/dataCenter/lm/engLMData/oov.txt
 
 . parse_options.sh || exit 1;
 
