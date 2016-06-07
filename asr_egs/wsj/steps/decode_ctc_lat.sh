@@ -7,7 +7,7 @@
 
 ## Begin configuration section
 stage=0
-nj=16
+nj=6
 cmd=run.pl
 num_threads=1
 
