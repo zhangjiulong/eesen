@@ -1,0 +1,410 @@
+=====================================================================
+             Data Preparation and FST Construction                 
+=====================================================================
+utils/validate_data_dir.sh: Successfully validated data-directory data/test
+utils/validate_data_dir.sh: Successfully validated data-directory data/train
+fstaddselfloops 'echo 83 |' 'echo 150260 |' 
+Dict and token FSTs compiling succeeded
+arpa2fst - 
+Processing 1-grams
+Processing 2-grams
+Processing 3-grams
+Connected 0 states without outgoing arcs.
+remove_oovs.pl: removed 0 lines.
+fsttablecompose data/lang_phn_test/L.fst data/lang_phn_test/G.fst 
+fstminimizeencoded 
+fstdeterminizestar --use-log=true 
+fsttablecompose data/lang_phn_test/T.fst data/lang_phn_test/LG.fst 
+Composing decoding graph TLG.fst succeeded
+=====================================================================
+                    FBank Feature Generation                       
+=====================================================================
+steps/make_fbank.sh --cmd run.pl --nj 20 data/train exp/make_fbank/train fbank
+steps/make_fbank.sh: moving data/train/feats.scp to data/train/.backup
+utils/validate_data_dir.sh: Successfully validated data-directory data/train
+steps/make_fbank.sh [info]: segments file exists: using that.
+Succeeded creating filterbank features for train
+fix_data_dir.sh: kept all 3120 utterances.
+fix_data_dir.sh: old files are kept in data/train/.backup
+steps/compute_cmvn_stats.sh data/train exp/make_fbank/train fbank
+Succeeded creating CMVN stats for train
+steps/make_fbank.sh --cmd run.pl --nj 20 data/test exp/make_fbank/test fbank
+steps/make_fbank.sh: moving data/test/feats.scp to data/test/.backup
+utils/validate_data_dir.sh: Successfully validated data-directory data/test
+steps/make_fbank.sh [info]: segments file exists: using that.
+Succeeded creating filterbank features for test
+fix_data_dir.sh: kept all 3180 utterances.
+fix_data_dir.sh: old files are kept in data/test/.backup
+steps/compute_cmvn_stats.sh data/test exp/make_fbank/test fbank
+Succeeded creating CMVN stats for test
+utils/subset_data_dir_tr_cv.sh --cv-spk-percent 5 data/train data/train_tr95 data/train_cv05
+/home/zhangjl/git/asr/eesen/asr_egs/timit/v1/utils/subset_data_dir.sh: reducing #utt from 3120 to 2964
+/home/zhangjl/git/asr/eesen/asr_egs/timit/v1/utils/subset_data_dir.sh: reducing #utt from 3120 to 156
+=====================================================================
+                Network Training with the 110-Hour Set             
+=====================================================================
+steps/train_ctc_parallel.sh --add-deltas true --num-sequence 20 --frame-num-limit 15000 --learn-rate 0.00004 --report-step 1000 --halving-after-epoch 12 --feats-tmpdir exp/train_phn_l2_c120/XXXXX data/train_tr95 data/train_cv05 exp/train_phn_l2_c120
+feat-to-len scp:data/train_tr95/feats.scp ark,t:- 
+feat-to-len scp:data/train_cv05/feats.scp ark,t:- 
+copy-feats 'ark,s,cs:apply-cmvn --norm-vars=true --utt2spk=ark:data/train_tr95/utt2spk scp:data/train_tr95/cmvn.scp scp:exp/train_phn_l2_c120/train.scp ark:- |' ark,scp:exp/train_phn_l2_c120/O9qmB/train.ark,exp/train_phn_l2_c120/train_local.scp 
+apply-cmvn --norm-vars=true --utt2spk=ark:data/train_tr95/utt2spk scp:data/train_tr95/cmvn.scp scp:exp/train_phn_l2_c120/train.scp ark:- 
+LOG (apply-cmvn:main():apply-cmvn.cc:129) Applied cepstral mean and variance normalization to 2964 utterances, errors on 0
+LOG (copy-feats:main():copy-feats.cc:100) Copied 2964 feature matrices.
+copy-feats 'ark,s,cs:apply-cmvn --norm-vars=true --utt2spk=ark:data/train_cv05/utt2spk scp:data/train_cv05/cmvn.scp scp:exp/train_phn_l2_c120/cv.scp ark:- |' ark,scp:exp/train_phn_l2_c120/O9qmB/cv.ark,exp/train_phn_l2_c120/cv_local.scp 
+apply-cmvn --norm-vars=true --utt2spk=ark:data/train_cv05/utt2spk scp:data/train_cv05/cmvn.scp scp:exp/train_phn_l2_c120/cv.scp ark:- 
+LOG (apply-cmvn:main():apply-cmvn.cc:129) Applied cepstral mean and variance normalization to 156 utterances, errors on 0
+LOG (copy-feats:main():copy-feats.cc:100) Copied 156 feature matrices.
+TRAINING STARTS [2016-Jun-7 09:35:27]
+[NOTE] TOKEN_ACCURACY refers to token accuracy, i.e., (1.0 - token_error_rate).
+EPOCH 1 RUNNING ... ENDS [2016-Jun-7 09:36:33]: lrate 4e-05, TRAIN ACCURACY 6.8731%, VALID ACCURACY 6.1933%
+EPOCH 2 RUNNING ... steps/train_ctc_parallel.sh: line 132: 28888 Killed                  $train_tool --report-step=$report_step --num-sequence=$num_sequence --frame-limit=$frame_num_limit --learn-rate=$learn_rate --momentum=$momentum --verbose=$verbose "$feats_tr" "$labels_tr" $dir/nnet/nnet.iter$[iter-1] $dir/nnet/nnet.iter${iter} 1>&$dir/log/tr.iter$iter.log
+Removing features tmpdir exp/train_phn_l2_c120/O9qmB @ pingan-nlp-001
+cv.ark
+train.ark
+=====================================================================
+             Data Preparation and FST Construction                 
+=====================================================================
+utils/validate_data_dir.sh: Successfully validated data-directory data/test
+utils/validate_data_dir.sh: Successfully validated data-directory data/train
+fstaddselfloops 'echo 83 |' 'echo 150260 |' 
+Dict and token FSTs compiling succeeded
+arpa2fst - 
+Processing 1-grams
+Processing 2-grams
+Processing 3-grams
+Connected 0 states without outgoing arcs.
+remove_oovs.pl: removed 0 lines.
+fsttablecompose data/lang_phn_test/L.fst data/lang_phn_test/G.fst 
+fstminimizeencoded 
+fstdeterminizestar --use-log=true 
+fsttablecompose data/lang_phn_test/T.fst data/lang_phn_test/LG.fst 
+Composing decoding graph TLG.fst succeeded
+=====================================================================
+                    FBank Feature Generation                       
+=====================================================================
+steps/make_fbank.sh --cmd run.pl --nj 20 data/train exp/make_fbank/train fbank
+utils/validate_data_dir.sh: Successfully validated data-directory data/train
+steps/make_fbank.sh [info]: segments file exists: using that.
+Succeeded creating filterbank features for train
+fix_data_dir.sh: kept all 3120 utterances.
+fix_data_dir.sh: old files are kept in data/train/.backup
+steps/compute_cmvn_stats.sh data/train exp/make_fbank/train fbank
+Succeeded creating CMVN stats for train
+steps/make_fbank.sh --cmd run.pl --nj 20 data/test exp/make_fbank/test fbank
+utils/validate_data_dir.sh: Successfully validated data-directory data/test
+steps/make_fbank.sh [info]: segments file exists: using that.
+Succeeded creating filterbank features for test
+fix_data_dir.sh: kept all 3180 utterances.
+fix_data_dir.sh: old files are kept in data/test/.backup
+steps/compute_cmvn_stats.sh data/test exp/make_fbank/test fbank
+Succeeded creating CMVN stats for test
+utils/subset_data_dir_tr_cv.sh --cv-spk-percent 5 data/train data/train_tr95 data/train_cv05
+/home/zhangjl/git/asr/eesen/asr_egs/timit/v1/utils/subset_data_dir.sh: reducing #utt from 3120 to 2964
+/home/zhangjl/git/asr/eesen/asr_egs/timit/v1/utils/subset_data_dir.sh: reducing #utt from 3120 to 156
+=====================================================================
+                Network Training with the 110-Hour Set             
+=====================================================================
+steps/train_ctc_parallel.sh --add-deltas true --num-sequence 20 --frame-num-limit 15000 --learn-rate 0.00004 --report-step 1000 --halving-after-epoch 12 --feats-tmpdir exp/train_phn_l2_c120/XXXXX data/train_tr95 data/train_cv05 exp/train_phn_l2_c120
+feat-to-len scp:data/train_tr95/feats.scp ark,t:- 
+feat-to-len scp:data/train_cv05/feats.scp ark,t:- 
+copy-feats 'ark,s,cs:apply-cmvn --norm-vars=true --utt2spk=ark:data/train_tr95/utt2spk scp:data/train_tr95/cmvn.scp scp:exp/train_phn_l2_c120/train.scp ark:- |' ark,scp:exp/train_phn_l2_c120/s6JHH/train.ark,exp/train_phn_l2_c120/train_local.scp 
+apply-cmvn --norm-vars=true --utt2spk=ark:data/train_tr95/utt2spk scp:data/train_tr95/cmvn.scp scp:exp/train_phn_l2_c120/train.scp ark:- 
+LOG (apply-cmvn:main():apply-cmvn.cc:129) Applied cepstral mean and variance normalization to 2964 utterances, errors on 0
+LOG (copy-feats:main():copy-feats.cc:100) Copied 2964 feature matrices.
+copy-feats 'ark,s,cs:apply-cmvn --norm-vars=true --utt2spk=ark:data/train_cv05/utt2spk scp:data/train_cv05/cmvn.scp scp:exp/train_phn_l2_c120/cv.scp ark:- |' ark,scp:exp/train_phn_l2_c120/s6JHH/cv.ark,exp/train_phn_l2_c120/cv_local.scp 
+apply-cmvn --norm-vars=true --utt2spk=ark:data/train_cv05/utt2spk scp:data/train_cv05/cmvn.scp scp:exp/train_phn_l2_c120/cv.scp ark:- 
+LOG (apply-cmvn:main():apply-cmvn.cc:129) Applied cepstral mean and variance normalization to 156 utterances, errors on 0
+LOG (copy-feats:main():copy-feats.cc:100) Copied 156 feature matrices.
+Initializing model as exp/train_phn_l2_c120/nnet/nnet.iter0
+TRAINING STARTS [2016-Jun-7 09:43:58]
+[NOTE] TOKEN_ACCURACY refers to token accuracy, i.e., (1.0 - token_error_rate).
+EPOCH 1 RUNNING ... ENDS [2016-Jun-7 09:45:06]: lrate 4e-05, TRAIN ACCURACY 6.7909%, VALID ACCURACY 8.5774%
+EPOCH 2 RUNNING ... ENDS [2016-Jun-7 09:46:18]: lrate 4e-05, TRAIN ACCURACY 8.7040%, VALID ACCURACY 8.3182%
+EPOCH 3 RUNNING ... ENDS [2016-Jun-7 09:47:31]: lrate 4e-05, TRAIN ACCURACY 9.2325%, VALID ACCURACY 8.7069%
+EPOCH 4 RUNNING ... ENDS [2016-Jun-7 09:48:44]: lrate 4e-05, TRAIN ACCURACY 9.9267%, VALID ACCURACY 9.0179%
+EPOCH 5 RUNNING ... ENDS [2016-Jun-7 09:49:56]: lrate 4e-05, TRAIN ACCURACY 10.4394%, VALID ACCURACY 9.5621%
+EPOCH 6 RUNNING ... ENDS [2016-Jun-7 09:51:08]: lrate 4e-05, TRAIN ACCURACY 11.2038%, VALID ACCURACY 9.7953%
+EPOCH 7 RUNNING ... ENDS [2016-Jun-7 09:52:21]: lrate 4e-05, TRAIN ACCURACY 12.4359%, VALID ACCURACY 10.2876%
+EPOCH 8 RUNNING ... ENDS [2016-Jun-7 09:53:34]: lrate 4e-05, TRAIN ACCURACY 13.6097%, VALID ACCURACY 10.2876%
+EPOCH 9 RUNNING ... ENDS [2016-Jun-7 09:54:46]: lrate 4e-05, TRAIN ACCURACY 15.2273%, VALID ACCURACY 11.5056%
+EPOCH 10 RUNNING ... ENDS [2016-Jun-7 09:55:58]: lrate 4e-05, TRAIN ACCURACY 16.5892%, VALID ACCURACY 12.8531%
+EPOCH 11 RUNNING ... ENDS [2016-Jun-7 09:57:11]: lrate 4e-05, TRAIN ACCURACY 18.4571%, VALID ACCURACY 12.7494%
+EPOCH 12 RUNNING ... ENDS [2016-Jun-7 09:58:23]: lrate 4e-05, TRAIN ACCURACY 20.2668%, VALID ACCURACY 14.0192%
+EPOCH 13 RUNNING ... ENDS [2016-Jun-7 09:59:35]: lrate 4e-05, TRAIN ACCURACY 21.2882%, VALID ACCURACY 16.0145%
+EPOCH 14 RUNNING ... ENDS [2016-Jun-7 10:00:52]: lrate 4e-05, TRAIN ACCURACY 22.7296%, VALID ACCURACY 14.1487%
+EPOCH 15 RUNNING ... ENDS [2016-Jun-7 10:02:25]: lrate 2e-05, TRAIN ACCURACY 23.6424%, VALID ACCURACY 16.8178%
+EPOCH 16 RUNNING ... ENDS [2016-Jun-7 10:03:54]: lrate 1e-05, TRAIN ACCURACY 24.3671%, VALID ACCURACY 17.1547%
+EPOCH 17 RUNNING ... steps/train_ctc_parallel.sh: line 132: 24011 Killed                  $train_tool --report-step=$report_step --num-sequence=$num_sequence --frame-limit=$frame_num_limit --learn-rate=$learn_rate --momentum=$momentum --verbose=$verbose "$feats_tr" "$labels_tr" $dir/nnet/nnet.iter$[iter-1] $dir/nnet/nnet.iter${iter} 1>&$dir/log/tr.iter$iter.log
+Removing features tmpdir exp/train_phn_l2_c120/s6JHH @ pingan-nlp-001
+cv.ark
+train.ark
+=====================================================================
+             Data Preparation and FST Construction                 
+=====================================================================
+utils/validate_data_dir.sh: Successfully validated data-directory data/test
+utils/validate_data_dir.sh: Successfully validated data-directory data/train
+fstaddselfloops 'echo 83 |' 'echo 150260 |' 
+Dict and token FSTs compiling succeeded
+arpa2fst - 
+Processing 1-grams
+Processing 2-grams
+Processing 3-grams
+Connected 0 states without outgoing arcs.
+remove_oovs.pl: removed 0 lines.
+fsttablecompose data/lang_phn_test/L.fst data/lang_phn_test/G.fst 
+fstminimizeencoded 
+fstdeterminizestar --use-log=true 
+fsttablecompose data/lang_phn_test/T.fst data/lang_phn_test/LG.fst 
+Composing decoding graph TLG.fst succeeded
+=====================================================================
+                    FBank Feature Generation                       
+=====================================================================
+steps/make_fbank.sh --cmd run.pl --nj 20 data/train exp/make_fbank/train fbank
+steps/make_fbank.sh: moving data/train/feats.scp to data/train/.backup
+utils/validate_data_dir.sh: Successfully validated data-directory data/train
+steps/make_fbank.sh [info]: segments file exists: using that.
+Succeeded creating filterbank features for train
+fix_data_dir.sh: kept all 3120 utterances.
+fix_data_dir.sh: old files are kept in data/train/.backup
+steps/compute_cmvn_stats.sh data/train exp/make_fbank/train fbank
+Succeeded creating CMVN stats for train
+steps/make_fbank.sh --cmd run.pl --nj 20 data/test exp/make_fbank/test fbank
+steps/make_fbank.sh: moving data/test/feats.scp to data/test/.backup
+utils/validate_data_dir.sh: Successfully validated data-directory data/test
+steps/make_fbank.sh [info]: segments file exists: using that.
+Succeeded creating filterbank features for test
+fix_data_dir.sh: kept all 3180 utterances.
+fix_data_dir.sh: old files are kept in data/test/.backup
+steps/compute_cmvn_stats.sh data/test exp/make_fbank/test fbank
+Succeeded creating CMVN stats for test
+utils/subset_data_dir_tr_cv.sh --cv-spk-percent 5 data/train data/train_tr95 data/train_cv05
+/home/zhangjl/git/asr/eesen/asr_egs/timit/v1/utils/subset_data_dir.sh: reducing #utt from 3120 to 2964
+/home/zhangjl/git/asr/eesen/asr_egs/timit/v1/utils/subset_data_dir.sh: reducing #utt from 3120 to 156
+=====================================================================
+                Network Training with the 110-Hour Set             
+=====================================================================
+steps/train_ctc_parallel.sh --add-deltas true --num-sequence 20 --frame-num-limit 15000 --learn-rate 0.00004 --report-step 1000 --halving-after-epoch 12 --feats-tmpdir exp/train_phn_l2_c120/XXXXX data/train_tr95 data/train_cv05 exp/train_phn_l2_c120
+feat-to-len scp:data/train_tr95/feats.scp ark,t:- 
+feat-to-len scp:data/train_cv05/feats.scp ark,t:- 
+copy-feats 'ark,s,cs:apply-cmvn --norm-vars=true --utt2spk=ark:data/train_tr95/utt2spk scp:data/train_tr95/cmvn.scp scp:exp/train_phn_l2_c120/train.scp ark:- |' ark,scp:exp/train_phn_l2_c120/tijg5/train.ark,exp/train_phn_l2_c120/train_local.scp 
+apply-cmvn --norm-vars=true --utt2spk=ark:data/train_tr95/utt2spk scp:data/train_tr95/cmvn.scp scp:exp/train_phn_l2_c120/train.scp ark:- 
+LOG (apply-cmvn:main():apply-cmvn.cc:129) Applied cepstral mean and variance normalization to 2964 utterances, errors on 0
+LOG (copy-feats:main():copy-feats.cc:100) Copied 2964 feature matrices.
+copy-feats 'ark,s,cs:apply-cmvn --norm-vars=true --utt2spk=ark:data/train_cv05/utt2spk scp:data/train_cv05/cmvn.scp scp:exp/train_phn_l2_c120/cv.scp ark:- |' ark,scp:exp/train_phn_l2_c120/tijg5/cv.ark,exp/train_phn_l2_c120/cv_local.scp 
+apply-cmvn --norm-vars=true --utt2spk=ark:data/train_cv05/utt2spk scp:data/train_cv05/cmvn.scp scp:exp/train_phn_l2_c120/cv.scp ark:- 
+LOG (apply-cmvn:main():apply-cmvn.cc:129) Applied cepstral mean and variance normalization to 156 utterances, errors on 0
+LOG (copy-feats:main():copy-feats.cc:100) Copied 156 feature matrices.
+TRAINING STARTS [2016-Jun-7 18:21:10]
+[NOTE] TOKEN_ACCURACY refers to token accuracy, i.e., (1.0 - token_error_rate).
+EPOCH 17 RUNNING ... steps/train_ctc_parallel.sh: line 132:  3100 Killed                  $train_tool --report-step=$report_step --num-sequence=$num_sequence --frame-limit=$frame_num_limit --learn-rate=$learn_rate --momentum=$momentum --verbose=$verbose "$feats_tr" "$labels_tr" $dir/nnet/nnet.iter$[iter-1] $dir/nnet/nnet.iter${iter} 1>&$dir/log/tr.iter$iter.log
+Removing features tmpdir exp/train_phn_l2_c120/tijg5 @ pingan-nlp-001
+cv.ark
+train.ark
+=====================================================================
+             Data Preparation and FST Construction                 
+=====================================================================
+utils/validate_data_dir.sh: Successfully validated data-directory data/test
+utils/validate_data_dir.sh: Successfully validated data-directory data/train
+fstaddselfloops 'echo 83 |' 'echo 150260 |' 
+Dict and token FSTs compiling succeeded
+arpa2fst - 
+Processing 1-grams
+Processing 2-grams
+Processing 3-grams
+Connected 0 states without outgoing arcs.
+remove_oovs.pl: removed 0 lines.
+fsttablecompose data/lang_phn_test/L.fst data/lang_phn_test/G.fst 
+fstminimizeencoded 
+fstdeterminizestar --use-log=true 
+fsttablecompose data/lang_phn_test/T.fst data/lang_phn_test/LG.fst 
+Composing decoding graph TLG.fst succeeded
+=====================================================================
+                    FBank Feature Generation                       
+=====================================================================
+steps/make_fbank.sh --cmd run.pl --nj 20 data/train exp/make_fbank/train fbank
+utils/validate_data_dir.sh: Successfully validated data-directory data/train
+steps/make_fbank.sh [info]: segments file exists: using that.
+Succeeded creating filterbank features for train
+fix_data_dir.sh: kept all 3120 utterances.
+fix_data_dir.sh: old files are kept in data/train/.backup
+steps/compute_cmvn_stats.sh data/train exp/make_fbank/train fbank
+Succeeded creating CMVN stats for train
+steps/make_fbank.sh --cmd run.pl --nj 20 data/test exp/make_fbank/test fbank
+utils/validate_data_dir.sh: Successfully validated data-directory data/test
+steps/make_fbank.sh [info]: segments file exists: using that.
+Succeeded creating filterbank features for test
+fix_data_dir.sh: kept all 3180 utterances.
+fix_data_dir.sh: old files are kept in data/test/.backup
+steps/compute_cmvn_stats.sh data/test exp/make_fbank/test fbank
+Succeeded creating CMVN stats for test
+utils/subset_data_dir_tr_cv.sh --cv-spk-percent 5 data/train data/train_tr95 data/train_cv05
+/home/zhangjl/git/asr/eesen/asr_egs/timit/v1/utils/subset_data_dir.sh: reducing #utt from 3120 to 2964
+/home/zhangjl/git/asr/eesen/asr_egs/timit/v1/utils/subset_data_dir.sh: reducing #utt from 3120 to 156
+=====================================================================
+                Network Training with the 110-Hour Set             
+=====================================================================
+steps/train_ctc_parallel.sh --add-deltas true --num-sequence 20 --frame-num-limit 15000 --learn-rate 0.00004 --report-step 1000 --halving-after-epoch 12 --feats-tmpdir exp/train_phn_l2_c120/XXXXX data/train_tr95 data/train_cv05 exp/train_phn_l2_c120
+feat-to-len scp:data/train_tr95/feats.scp ark,t:- 
+feat-to-len scp:data/train_cv05/feats.scp ark,t:- 
+copy-feats 'ark,s,cs:apply-cmvn --norm-vars=true --utt2spk=ark:data/train_tr95/utt2spk scp:data/train_tr95/cmvn.scp scp:exp/train_phn_l2_c120/train.scp ark:- |' ark,scp:exp/train_phn_l2_c120/tmcrH/train.ark,exp/train_phn_l2_c120/train_local.scp 
+apply-cmvn --norm-vars=true --utt2spk=ark:data/train_tr95/utt2spk scp:data/train_tr95/cmvn.scp scp:exp/train_phn_l2_c120/train.scp ark:- 
+LOG (apply-cmvn:main():apply-cmvn.cc:129) Applied cepstral mean and variance normalization to 2964 utterances, errors on 0
+LOG (copy-feats:main():copy-feats.cc:100) Copied 2964 feature matrices.
+copy-feats 'ark,s,cs:apply-cmvn --norm-vars=true --utt2spk=ark:data/train_cv05/utt2spk scp:data/train_cv05/cmvn.scp scp:exp/train_phn_l2_c120/cv.scp ark:- |' ark,scp:exp/train_phn_l2_c120/tmcrH/cv.ark,exp/train_phn_l2_c120/cv_local.scp 
+apply-cmvn --norm-vars=true --utt2spk=ark:data/train_cv05/utt2spk scp:data/train_cv05/cmvn.scp scp:exp/train_phn_l2_c120/cv.scp ark:- 
+LOG (apply-cmvn:main():apply-cmvn.cc:129) Applied cepstral mean and variance normalization to 156 utterances, errors on 0
+LOG (copy-feats:main():copy-feats.cc:100) Copied 156 feature matrices.
+Initializing model as exp/train_phn_l2_c120/nnet/nnet.iter0
+TRAINING STARTS [2016-Jun-7 18:22:47]
+[NOTE] TOKEN_ACCURACY refers to token accuracy, i.e., (1.0 - token_error_rate).
+EPOCH 1 RUNNING ... ENDS [2016-Jun-7 18:23:55]: lrate 4e-05, TRAIN ACCURACY 6.7909%, VALID ACCURACY 8.5774%
+EPOCH 2 RUNNING ... ENDS [2016-Jun-7 18:25:08]: lrate 4e-05, TRAIN ACCURACY 8.7040%, VALID ACCURACY 8.3182%
+EPOCH 3 RUNNING ... ENDS [2016-Jun-7 18:26:20]: lrate 4e-05, TRAIN ACCURACY 9.2325%, VALID ACCURACY 8.7069%
+EPOCH 4 RUNNING ... ENDS [2016-Jun-7 18:27:31]: lrate 4e-05, TRAIN ACCURACY 9.9267%, VALID ACCURACY 9.0179%
+EPOCH 5 RUNNING ... ENDS [2016-Jun-7 18:28:42]: lrate 4e-05, TRAIN ACCURACY 10.4394%, VALID ACCURACY 9.5621%
+EPOCH 6 RUNNING ... ENDS [2016-Jun-7 18:29:54]: lrate 4e-05, TRAIN ACCURACY 11.2038%, VALID ACCURACY 9.7953%
+EPOCH 7 RUNNING ... ENDS [2016-Jun-7 18:31:06]: lrate 4e-05, TRAIN ACCURACY 12.4359%, VALID ACCURACY 10.2876%
+EPOCH 8 RUNNING ... ENDS [2016-Jun-7 18:32:18]: lrate 4e-05, TRAIN ACCURACY 13.6097%, VALID ACCURACY 10.2876%
+EPOCH 9 RUNNING ... ENDS [2016-Jun-7 18:33:31]: lrate 4e-05, TRAIN ACCURACY 15.2273%, VALID ACCURACY 11.5056%
+EPOCH 10 RUNNING ... ENDS [2016-Jun-7 18:34:42]: lrate 4e-05, TRAIN ACCURACY 16.5892%, VALID ACCURACY 12.8531%
+EPOCH 11 RUNNING ... ENDS [2016-Jun-7 18:35:54]: lrate 4e-05, TRAIN ACCURACY 18.4571%, VALID ACCURACY 12.7494%
+EPOCH 12 RUNNING ... ENDS [2016-Jun-7 18:37:06]: lrate 4e-05, TRAIN ACCURACY 20.2668%, VALID ACCURACY 14.0192%
+EPOCH 13 RUNNING ... ENDS [2016-Jun-7 18:38:18]: lrate 4e-05, TRAIN ACCURACY 21.2882%, VALID ACCURACY 16.0145%
+EPOCH 14 RUNNING ... ENDS [2016-Jun-7 18:39:30]: lrate 4e-05, TRAIN ACCURACY 22.7296%, VALID ACCURACY 14.1487%
+EPOCH 15 RUNNING ... ENDS [2016-Jun-7 18:40:42]: lrate 2e-05, TRAIN ACCURACY 23.6424%, VALID ACCURACY 16.8178%
+EPOCH 16 RUNNING ... ENDS [2016-Jun-7 18:41:54]: lrate 1e-05, TRAIN ACCURACY 24.3671%, VALID ACCURACY 17.1547%
+EPOCH 17 RUNNING ... ENDS [2016-Jun-7 18:43:05]: lrate 5e-06, TRAIN ACCURACY 24.6903%, VALID ACCURACY 17.2843%
+EPOCH 18 RUNNING ... ENDS [2016-Jun-7 18:44:17]: lrate 2.5e-06, TRAIN ACCURACY 24.7990%, VALID ACCURACY 17.6471%
+EPOCH 19 RUNNING ... ENDS [2016-Jun-7 18:45:29]: lrate 1.25e-06, TRAIN ACCURACY 24.8149%, VALID ACCURACY 17.7507%
+EPOCH 20 RUNNING ... ENDS [2016-Jun-7 18:46:40]: lrate 6.25e-07, TRAIN ACCURACY 24.8904%, VALID ACCURACY 17.8544%
+EPOCH 21 RUNNING ... ENDS [2016-Jun-7 18:47:52]: lrate 3.125e-07, TRAIN ACCURACY 24.9261%, VALID ACCURACY 17.9062%
+finished, too small rel. improvement .0518
+Training succeeded. The final model exp/train_phn_l2_c120/final.nnet
+Removing features tmpdir exp/train_phn_l2_c120/tmcrH @ pingan-nlp-001
+cv.ark
+train.ark
+=====================================================================
+                            Decoding                               
+=====================================================================
+steps/decode_ctc_lat.sh --cmd run.pl --nj 11 --beam 17.0 --lattice_beam 8.0 --max-active 5000 --acwt 0.6 data/lang_phn_test data/test exp/train_phn_l2_c120/decode_test
+Preferring non-gpu netbin code
+steps/decode_ctc_lat.sh: feature: norm_vars(true) add_deltas(true)
+=====================================================================
+             Data Preparation and FST Construction                 
+=====================================================================
+utils/validate_data_dir.sh: Successfully validated data-directory data/test
+utils/validate_data_dir.sh: Successfully validated data-directory data/train
+fstaddselfloops 'echo 89 |' 'echo 12872 |' 
+Dict and token FSTs compiling succeeded
+arpa2fst - 
+Processing 1-grams
+Processing 2-grams
+Processing 3-grams
+Connected 0 states without outgoing arcs.
+remove_oovs.pl: removed 0 lines.
+fstminimizeencoded 
+fsttablecompose data/lang_phn_test/L.fst data/lang_phn_test/G.fst 
+fstdeterminizestar --use-log=true 
+fsttablecompose data/lang_phn_test/T.fst data/lang_phn_test/LG.fst 
+Composing decoding graph TLG.fst succeeded
+=====================================================================
+                    FBank Feature Generation                       
+=====================================================================
+steps/make_fbank.sh --cmd run.pl --nj 20 data/train exp/make_fbank/train fbank
+utils/validate_data_dir.sh: Successfully validated data-directory data/train
+steps/make_fbank.sh [info]: segments file exists: using that.
+It seems not all of the feature files were successfully (63993 != 64000);
+consider using utils/fix_data_dir.sh data/train
+Succeeded creating filterbank features for train
+fix_data_dir.sh: kept 63993 utterances out of 64000
+fix_data_dir.sh: old files are kept in data/train/.backup
+steps/compute_cmvn_stats.sh data/train exp/make_fbank/train fbank
+Succeeded creating CMVN stats for train
+steps/make_fbank.sh --cmd run.pl --nj 20 data/test exp/make_fbank/test fbank
+utils/validate_data_dir.sh: Successfully validated data-directory data/test
+steps/make_fbank.sh [info]: segments file exists: using that.
+It seems not all of the feature files were successfully (63993 != 64000);
+consider using utils/fix_data_dir.sh data/test
+Succeeded creating filterbank features for test
+fix_data_dir.sh: kept 63993 utterances out of 64000
+fix_data_dir.sh: old files are kept in data/test/.backup
+steps/compute_cmvn_stats.sh data/test exp/make_fbank/test fbank
+Succeeded creating CMVN stats for test
+utils/subset_data_dir_tr_cv.sh --cv-spk-percent 5 data/train data/train_tr95 data/train_cv05
+/home/zhangjl/git/asr/eesen/asr_egs/td/v1500/utils/subset_data_dir.sh: reducing #utt from 63993 to 60934
+/home/zhangjl/git/asr/eesen/asr_egs/td/v1500/utils/subset_data_dir.sh: reducing #utt from 63993 to 3059
+=====================================================================
+                Network Training with the 110-Hour Set             
+=====================================================================
+steps/train_ctc_parallel.sh --add-deltas true --num-sequence 20 --frame-num-limit 15000 --learn-rate 0.00004 --report-step 1000 --halving-after-epoch 12 --feats-tmpdir exp/train_phn_l5_c320/XXXXX data/train_tr95 data/train_cv05 exp/train_phn_l5_c320
+feat-to-len scp:data/train_tr95/feats.scp ark,t:- 
+feat-to-len scp:data/train_cv05/feats.scp ark,t:- 
+copy-feats 'ark,s,cs:apply-cmvn --norm-vars=true --utt2spk=ark:data/train_tr95/utt2spk scp:data/train_tr95/cmvn.scp scp:exp/train_phn_l5_c320/train.scp ark:- |' ark,scp:exp/train_phn_l5_c320/R3zzR/train.ark,exp/train_phn_l5_c320/train_local.scp 
+apply-cmvn --norm-vars=true --utt2spk=ark:data/train_tr95/utt2spk scp:data/train_tr95/cmvn.scp scp:exp/train_phn_l5_c320/train.scp ark:- 
+LOG (apply-cmvn:main():apply-cmvn.cc:129) Applied cepstral mean and variance normalization to 60934 utterances, errors on 0
+LOG (copy-feats:main():copy-feats.cc:100) Copied 60934 feature matrices.
+copy-feats 'ark,s,cs:apply-cmvn --norm-vars=true --utt2spk=ark:data/train_cv05/utt2spk scp:data/train_cv05/cmvn.scp scp:exp/train_phn_l5_c320/cv.scp ark:- |' ark,scp:exp/train_phn_l5_c320/R3zzR/cv.ark,exp/train_phn_l5_c320/cv_local.scp 
+apply-cmvn --norm-vars=true --utt2spk=ark:data/train_cv05/utt2spk scp:data/train_cv05/cmvn.scp scp:exp/train_phn_l5_c320/cv.scp ark:- 
+LOG (apply-cmvn:main():apply-cmvn.cc:129) Applied cepstral mean and variance normalization to 3059 utterances, errors on 0
+LOG (copy-feats:main():copy-feats.cc:100) Copied 3059 feature matrices.
+Initializing model as exp/train_phn_l5_c320/nnet/nnet.iter0
+TRAINING STARTS [2016-Jun-15 11:35:19]
+[NOTE] TOKEN_ACCURACY refers to token accuracy, i.e., (1.0 - token_error_rate).
+EPOCH 1 RUNNING ... steps/train_ctc_parallel.sh: line 132: 13622 Killed                  $train_tool --report-step=$report_step --num-sequence=$num_sequence --frame-limit=$frame_num_limit --learn-rate=$learn_rate --momentum=$momentum --verbose=$verbose "$feats_tr" "$labels_tr" $dir/nnet/nnet.iter$[iter-1] $dir/nnet/nnet.iter${iter} 1>&$dir/log/tr.iter$iter.log
+Removing features tmpdir exp/train_phn_l5_c320/R3zzR @ pingan-nlp-001
+cv.ark
+train.ark
+=====================================================================
+             Data Preparation and FST Construction                 
+=====================================================================
+utils/validate_data_dir.sh: Successfully validated data-directory data/test
+utils/validate_data_dir.sh: Successfully validated data-directory data/train
+fstaddselfloops 'echo 89 |' 'echo 12872 |' 
+Dict and token FSTs compiling succeeded
+arpa2fst - 
+Processing 1-grams
+Processing 2-grams
+Processing 3-grams
+Connected 0 states without outgoing arcs.
+remove_oovs.pl: removed 0 lines.
+fsttablecompose data/lang_phn_test/L.fst data/lang_phn_test/G.fst 
+fstdeterminizestar --use-log=true 
+fstminimizeencoded 
+fsttablecompose data/lang_phn_test/T.fst data/lang_phn_test/LG.fst 
+Composing decoding graph TLG.fst succeeded
+=====================================================================
+                    FBank Feature Generation                       
+=====================================================================
+steps/make_fbank.sh --cmd run.pl --nj 20 data/train exp/make_fbank/train fbank
+utils/validate_data_dir.sh: Successfully validated data-directory data/train
+steps/make_fbank.sh [info]: segments file exists: using that.
+It seems not all of the feature files were successfully (63993 != 64000);
+consider using utils/fix_data_dir.sh data/train
+Succeeded creating filterbank features for train
+=====================================================================
+             Data Preparation and FST Construction                 
+=====================================================================
+utils/validate_data_dir.sh: Successfully validated data-directory data/test
+utils/validate_data_dir.sh: Successfully validated data-directory data/train
+fstaddselfloops 'echo 89 |' 'echo 12872 |' 
+Dict and token FSTs compiling succeeded
+arpa2fst - 
+Processing 1-grams
+Processing 2-grams
+Processing 3-grams
+Connected 0 states without outgoing arcs.
+remove_oovs.pl: removed 0 lines.
+fsttablecompose data/lang_phn_test/L.fst data/lang_phn_test/G.fst 
+fstminimizeencoded 
+fstdeterminizestar --use-log=true 
+fsttablecompose data/lang_phn_test/T.fst data/lang_phn_test/LG.fst 
+Composing decoding graph TLG.fst succeeded
+=====================================================================
+                    FBank Feature Generation                       
+=====================================================================
+steps/make_fbank.sh --cmd run.pl --nj 20 data/train exp/make_fbank/train fbank
+utils/validate_data_dir.sh: Successfully validated data-directory data/train
+steps/make_fbank.sh [info]: segments file exists: using that.
+It seems not all of the feature files were successfully (63993 != 64000);
+consider using utils/fix_data_dir.sh data/train
+Succeeded creating filterbank features for train
