@@ -8,7 +8,7 @@
 
 # data_dir=db/TEDLIUM_release1
 # /home/zhangjl/dataCenter/asr/timitTedFormat
-data_dir=/home/zhangjl/dataCenter/asr/td/vx/stmSplited/1500
+data_dir=/home/zhangjl/dataCenter/asr/td/vx/stmSplited/3000
 
 . path.sh
 . parse_options.sh || exit 1;

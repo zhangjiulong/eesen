@@ -85,7 +85,7 @@ if [ -f $data/segments ]; then
 
   $cmd JOB=1:$nj $logdir/make_fbank_${name}.JOB.log \
     extract-segments scp,p:$scp $logdir/segments.JOB ark:- \| \
-    compute-fbank-feats $vtln_opts --verbose=2 --config=$fbank_config ark:- ark:- \| \
+    compute-fbank-feats $vtln_opts --sample-frequency=8000 --verbose=2 --config=$fbank_config ark:- ark:- \| \
     copy-feats --compress=$compress ark:- \
      ark,scp:$fbankdir/raw_fbank_$name.JOB.ark,$fbankdir/raw_fbank_$name.JOB.scp \
      || exit 208;
@@ -100,7 +100,7 @@ else
   utils/split_scp.pl $scp $split_scps || exit 1;
  
   $cmd JOB=1:$nj $logdir/make_fbank_${name}.JOB.log \
-    compute-fbank-feats $vtln_opts --verbose=2 --config=$fbank_config scp,p:$logdir/wav.JOB.scp ark:- \| \
+    compute-fbank-feats $vtln_opts --sample-frequency=8000 --verbose=2 --config=$fbank_config scp,p:$logdir/wav.JOB.scp ark:- \| \
     copy-feats --compress=$compress ark:- \
      ark,scp:$fbankdir/raw_fbank_$name.JOB.ark,$fbankdir/raw_fbank_$name.JOB.scp \
      || exit 209;
