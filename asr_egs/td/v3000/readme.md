@@ -24,3 +24,9 @@
       lstm_layer_num=5     # number of LSTM layers                                                                                    
       lstm_cell_dim=320    # number of memory cells in every LSTM layer 
       ```
+
+5. 修改path.sh 指定gpu的number
+export CUDA_VISIBLE_DEVICES=gpu0
+
+6. 修改samplereate
+steps/make_fbank.sh: compute-fbank-feats $vtln_opts --sample-frequency=8000 --verbose=2 (两处)
