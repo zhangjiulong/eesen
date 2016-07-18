@@ -5,6 +5,8 @@ mountDir=/asrDataCenter
 # install client software
 sudo apt-get install nfs-common
 
+sudo mount -a 
+
 # mkdir dir
 [ -r $mountDir ] \
   && echo "dir $mountDir  exists " && exit 2;
