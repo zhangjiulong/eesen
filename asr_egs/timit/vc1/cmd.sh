@@ -13,9 +13,9 @@
 #export cuda_cmd="queue.pl -l gpu=1"
 
 #c) run it locally... works for CMU rocks cluster
-export train_cmd=run.pl
-export decode_cmd=run.pl
-export cuda_cmd=run.pl
+#export train_cmd=run.pl
+#export decode_cmd=run.pl
+#export cuda_cmd=run.pl
 
 #c) pingan cluster options
 export train_cmd="queue.pl -q all.q -l arch=*64"
