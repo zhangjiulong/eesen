@@ -56,7 +56,7 @@ use Getopt::Long;
 my $qsub_opts = "";
 my $sync = 0;
 my $num_threads = 1;
-my $gpu = 0;
+my $gpu = 1;
 
 my $config = "conf/queue.conf";
 

@@ -1,0 +1,22 @@
+fstaddselfloops 'echo 82 |' 'echo 150260 |' 
+Bad line in unknown-symbol list: 
+arpa2fst - 
+Processing 1-grams
+Processing 2-grams
+Processing 3-grams
+Connected 0 states without outgoing arcs.
+fsttablecompose data/lang_phn_test/L.fst data/lang_phn_test/G.fst 
+fstminimizeencoded 
+fstdeterminizestar --use-log=true 
+fsttablecompose data/lang_phn_test/T.fst data/lang_phn_test/LG.fst 
+feat-to-len scp:data/train_tr95/feats.scp ark,t:- 
+feat-to-len scp:data/train_cv05/feats.scp ark,t:- 
+copy-feats 'ark,s,cs:apply-cmvn --norm-vars=true --utt2spk=ark:data/train_tr95/utt2spk scp:data/train_tr95/cmvn.scp scp:exp/train_phn_l5_c320/train.scp ark:- |' ark,scp:exp/train_phn_l5_c320/zWToH/train.ark,exp/train_phn_l5_c320/train_local.scp 
+apply-cmvn --norm-vars=true --utt2spk=ark:data/train_tr95/utt2spk scp:data/train_tr95/cmvn.scp scp:exp/train_phn_l5_c320/train.scp ark:- 
+LOG (apply-cmvn:main():apply-cmvn.cc:129) Applied cepstral mean and variance normalization to 2964 utterances, errors on 0
+LOG (copy-feats:main():copy-feats.cc:100) Copied 2964 feature matrices.
+copy-feats 'ark,s,cs:apply-cmvn --norm-vars=true --utt2spk=ark:data/train_cv05/utt2spk scp:data/train_cv05/cmvn.scp scp:exp/train_phn_l5_c320/cv.scp ark:- |' ark,scp:exp/train_phn_l5_c320/zWToH/cv.ark,exp/train_phn_l5_c320/cv_local.scp 
+apply-cmvn --norm-vars=true --utt2spk=ark:data/train_cv05/utt2spk scp:data/train_cv05/cmvn.scp scp:exp/train_phn_l5_c320/cv.scp ark:- 
+LOG (apply-cmvn:main():apply-cmvn.cc:129) Applied cepstral mean and variance normalization to 156 utterances, errors on 0
+LOG (copy-feats:main():copy-feats.cc:100) Copied 156 feature matrices.
+run.pl: 11 / 11 failed, log is in exp/train_phn_l5_c320/decode_test/log/decode.*.log
