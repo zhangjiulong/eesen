@@ -8,7 +8,7 @@
 
 # data_dir=db/TEDLIUM_release1
 # /home/zhangjl/dataCenter/asr/timitTedFormat
-data_dir=/home/zhangjl/dataCenter/asr/timitTedFormat
+data_dir=/asrDataCenter/dataCenter/asr/timitTedFormat
 
 . path.sh
 . parse_options.sh || exit 1;
@@ -19,7 +19,7 @@ sph2pipe=$EESEN_ROOT/tools/sph2pipe_v2.5/sph2pipe
 [ ! -x $sph2pipe ] \
   && echo "Could not execute the sph2pipe program at $sph2pipe" && exit 2;
 
-dicFile=/home/zhangjl/dataCenter/lm/engLMData/timit.4lm.dic
+dicFile=/asrDataCenter/dataCenter/lm/engLMData/timit.4lm.dic
 [ ! -r $dicFile ] \
   && echo "dic file $dicFile do not exists " && exit 2;
 

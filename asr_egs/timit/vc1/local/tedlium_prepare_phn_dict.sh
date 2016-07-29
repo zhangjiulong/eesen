@@ -7,7 +7,7 @@
 dir=data/local/dict_phn
 mkdir -p $dir
 
-srcdict=/home/zhangjl/dataCenter/lm/engLMData/timit.4lm.dic
+srcdict=/asrDataCenter/dataCenter/lm/engLMData/timit.4lm.dic
 
 . parse_options.sh
 
