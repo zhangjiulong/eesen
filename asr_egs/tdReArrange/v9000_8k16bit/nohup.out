@@ -1,0 +1,21 @@
+=====================================================================
+                Network Training with the 110-Hour Set             
+=====================================================================
+steps/train_ctc_parallel.sh --add-deltas true --num-sequence 10 --frame-num-limit 15000 --learn-rate 0.00004 --report-step 1000 --halving-after-epoch 12 --feats-tmpdir exp/train_phn_l10_c640/XXXXX data/train_tr95 data/train_cv05 exp/train_phn_l10_c640
+feat-to-len scp:data/train_tr95/feats.scp ark,t:- 
+feat-to-len scp:data/train_cv05/feats.scp ark,t:- 
+copy-feats 'ark,s,cs:apply-cmvn --norm-vars=true --utt2spk=ark:data/train_tr95/utt2spk scp:data/train_tr95/cmvn.scp scp:exp/train_phn_l10_c640/train.scp ark:- |' ark,scp:exp/train_phn_l10_c640/PvI2W/train.ark,exp/train_phn_l10_c640/train_local.scp 
+apply-cmvn --norm-vars=true --utt2spk=ark:data/train_tr95/utt2spk scp:data/train_tr95/cmvn.scp scp:exp/train_phn_l10_c640/train.scp ark:- 
+LOG (apply-cmvn:main():apply-cmvn.cc:129) Applied cepstral mean and variance normalization to 317667 utterances, errors on 0
+LOG (copy-feats:main():copy-feats.cc:100) Copied 317667 feature matrices.
+copy-feats 'ark,s,cs:apply-cmvn --norm-vars=true --utt2spk=ark:data/train_cv05/utt2spk scp:data/train_cv05/cmvn.scp scp:exp/train_phn_l10_c640/cv.scp ark:- |' ark,scp:exp/train_phn_l10_c640/PvI2W/cv.ark,exp/train_phn_l10_c640/cv_local.scp 
+apply-cmvn --norm-vars=true --utt2spk=ark:data/train_cv05/utt2spk scp:data/train_cv05/cmvn.scp scp:exp/train_phn_l10_c640/cv.scp ark:- 
+LOG (apply-cmvn:main():apply-cmvn.cc:129) Applied cepstral mean and variance normalization to 16866 utterances, errors on 0
+LOG (copy-feats:main():copy-feats.cc:100) Copied 16866 feature matrices.
+Initializing model as exp/train_phn_l10_c640/nnet/nnet.iter0
+TRAINING STARTS [2016-Aug-12 15:49:25]
+[NOTE] TOKEN_ACCURACY refers to token accuracy, i.e., (1.0 - token_error_rate).
+EPOCH 1 RUNNING ... steps/train_ctc_parallel.sh: line 132: 30693 Killed                  $train_tool --report-step=$report_step --num-sequence=$num_sequence --frame-limit=$frame_num_limit --learn-rate=$learn_rate --momentum=$momentum --verbose=$verbose "$feats_tr" "$labels_tr" $dir/nnet/nnet.iter$[iter-1] $dir/nnet/nnet.iter${iter} 1>&$dir/log/tr.iter$iter.log
+Removing features tmpdir exp/train_phn_l10_c640/PvI2W @ cluster000.kaldi.pingan
+cv.ark
+train.ark
