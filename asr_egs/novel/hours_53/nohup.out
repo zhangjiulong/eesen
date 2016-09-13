@@ -1,0 +1,5 @@
+=====================================================================
+             Data Preparation and FST Construction                 
+=====================================================================
+local/tedlium_prepare_data.sh: line 48: /bin/cat: Argument list too long
+utils/validate_data_dir.sh: empty file spk2utt

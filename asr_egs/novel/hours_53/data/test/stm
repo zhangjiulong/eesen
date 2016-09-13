@@ -1,0 +1,7 @@
+;; 
+;; LABEL "o" "Overall" "Overall results"
+;; LABEL "f0" "f0" "Wideband channel"
+;; LABEL "f2" "f2" "Telephone channel"
+;; LABEL "male" "Male" "Male Talkers"
+;; LABEL "female" "Female" "Female Talkers"
+;; 
